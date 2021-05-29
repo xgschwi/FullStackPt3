@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
     {
         "name": "Arto Hellas",
@@ -49,10 +51,34 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+// Deletes a person from the phonebook
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(p => p.id === id)
 })
+
+const generateId = () => {
+    return Math.round(Math.random()*100000)
+}
+
+// Creates a new person for the phonebook
+app.post('/api/persons', (request, response) => {
+    
+    if(request.body.name && request.body.number) { 
+        const id = generateId()
+        const person = request.body
+        person.id = id
+
+        persons.concat(person)
+        response.json(person)
+    }
+    else {
+        return response.status(400).json({ 
+            error: 'Information missing'
+        })
+    }
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on Port ${PORT}`)
