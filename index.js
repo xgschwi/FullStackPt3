@@ -42,14 +42,17 @@ app.get('/info', (request, response) => {
 })
 
 // Display information about a person in phonebook
-app.get('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    const person = persons.find(p => p.id === id)
+    persons = persons.filter(p => p.id !== id)
 
-    if(person) response.json(person)
-    else response.status(404).end()
+    response.status(204).end()
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const person = persons.find(p => p.id === id)
+})
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on Port ${PORT}`)
