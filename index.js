@@ -64,17 +64,29 @@ const generateId = () => {
 // Creates a new person for the phonebook
 app.post('/api/persons', (request, response) => {
     
-    if(request.body.name && request.body.number) { 
-        const id = generateId()
-        const person = request.body
-        person.id = id
+    const body = request.body
 
-        persons.concat(person)
-        response.json(person)
+
+    if(body.name && body.number) { 
+        const person = {
+            name: body.name,
+            number: body.number,
+            id: generateId()
+        }
+
+        const copy = persons.find(p => p.name === person.name)
+
+        if(!copy) {
+            persons = persons.concat(person)
+            response.json(person)
+        }
+        else return response.status(400).json({
+            error: 'Name must be unique'
+        })
     }
     else {
         return response.status(400).json({ 
-            error: 'Information missing'
+            error: 'Name or Number missing'
         })
     }
 })
