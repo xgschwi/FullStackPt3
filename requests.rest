@@ -1,4 +1,4 @@
-DELETE https://murmuring-anchorage-64603.herokuapp.com/api/persons/52899
+DELETE http://localhost:3001/api/persons/60b3d0a0cb84972f80ab5a0d
 
 ###
 GET https://murmuring-anchorage-64603.herokuapp.com/api/persons

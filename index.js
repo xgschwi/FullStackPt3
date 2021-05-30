@@ -49,6 +49,21 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
+app.get('/api/persons/:id', (request, response) => {
+    Person.findById(request.params.id)
+    .then(person => {
+        if(person) {
+            response.json(person)
+        } else {
+            response.status(404).end()
+        }
+    })
+    .catch(err => {
+        console.log(error)
+        response.status(500).end()
+    })  
+})
+
 // Displays information about phonebook
 app.get('/info', (request, response) => {
     const size = persons.length
@@ -63,10 +78,13 @@ app.get('/info', (request, response) => {
 
 // Display information about a person in phonebook
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(p => p.id !== id)
-
-    response.status(204).end()
+    Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+        response.status(204).end()
+    })
+    .catch(err => {
+        console.log(err)
+    })
 })
 
 // Deletes a person from the phonebook
