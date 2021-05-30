@@ -1,7 +1,7 @@
 DELETE http://localhost:3001/api/persons/60b3d0a0cb84972f80ab5a0d
 
 ###
-GET https://murmuring-anchorage-64603.herokuapp.com/api/persons
+GET http://localhost:3001/api/persons/60b3ece880285e1d1c5c8f0c
 
 ###
 POST http://localhost:3001/api/persons
