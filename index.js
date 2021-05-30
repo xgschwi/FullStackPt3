@@ -104,27 +104,33 @@ const generateId = () => {
 }
 
 // Creates a new person for the phonebook
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     
     const body = request.body
 
 
     if(body.name && body.number) { 
-        const person = new Person( {
+        const person ={
             name: body.name,
             number: body.number
-        })
-
-        const copy = persons.find(p => p.name === person.name)
-
-        if(!copy) {
-            person.save().then(savedPerson => {
-                response.json(savedPerson)
-            })
-
         }
-        else return response.status(400).json({
-            error: 'Name must be unique'
+
+        Person.findOne({name: body.name}).then(copy => {
+
+            if(copy === null ) {
+                const p = Person(person)
+                p.save().then(savedPerson => {
+                    response.json(savedPerson)
+                })
+
+            }
+            else {
+                Person.findByIdAndUpdate(copy.id, person, {new: true})
+                .then(updatedPerson => {
+                    response.json(updatedPerson)
+                })
+                .catch(err => next(err))
+            }
         })
     }
     else {
