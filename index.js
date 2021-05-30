@@ -1,8 +1,14 @@
-const cors = require('cors')
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
+const Person = require('./models/person')
+
 app.use(express.static('build'))
+
+const cors = require('cors')
 app.use(cors())
+
 const morgan = require('morgan')
 
 app.use(express.json())
@@ -38,8 +44,9 @@ let persons = [
 
 // Displays all numbers from the people in the phonebook
 app.get('/api/persons', (request, response) => {
-    console.log('persons')
-    response.json(persons)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
 })
 
 // Displays information about phonebook
@@ -102,8 +109,7 @@ app.post('/api/persons', (request, response) => {
     }
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on Port ${PORT}`)
-    console.log(JSON.stringify(persons))
 })
