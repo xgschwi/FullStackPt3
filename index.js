@@ -3,14 +3,12 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const Person = require('./models/person')
-
-app.use(express.static('build'))
-
 const cors = require('cors')
-app.use(cors())
-
 const morgan = require('morgan')
 
+
+app.use(express.static('build'))
+app.use(cors())
 app.use(express.json())
 
 // Logs content of request
@@ -19,6 +17,18 @@ morgan.token('content', (req, res) => {
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
+
+const errHandler = (err, request, response, next) => {
+    console.log(errmessage)
+
+    if(err.name == 'CastError') {
+        return response.status(400).send({error: 'malformatted id'})
+    }
+    next(err)
+}
+
+app.use(errHandler)
+
 let persons = [
     {
         "name": "Arto Hellas",
@@ -49,7 +59,8 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+
+app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
     .then(person => {
         if(person) {
@@ -58,10 +69,7 @@ app.get('/api/persons/:id', (request, response) => {
             response.status(404).end()
         }
     })
-    .catch(err => {
-        console.log(error)
-        response.status(500).end()
-    })  
+    .catch(err => next(err))  
 })
 
 // Displays information about phonebook
@@ -77,14 +85,12 @@ app.get('/info', (request, response) => {
 })
 
 // Display information about a person in phonebook
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id)
     .then(result => {
         response.status(204).end()
     })
-    .catch(err => {
-        console.log(err)
-    })
+    .catch(err => next(err))
 })
 
 // Deletes a person from the phonebook
