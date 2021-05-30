@@ -38,6 +38,7 @@ let persons = [
 
 // Displays all numbers from the people in the phonebook
 app.get('/api/persons', (request, response) => {
+    console.log('persons')
     response.json(persons)
 })
 
