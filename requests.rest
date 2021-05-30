@@ -1,13 +1,13 @@
-DELETE http://localhost:3001/api/persons/4
+DELETE https://murmuring-anchorage-64603.herokuapp.com/api/persons/52899
 
 ###
-GET http://localhost:3001/api/persons
+GET https://murmuring-anchorage-64603.herokuapp.com/api/persons
 
 ###
-POST http://localhost:3001/api/persons
+POST https://murmuring-anchorage-64603.herokuapp.com/api/persons
 content-type: application/json
 
 {
     "name": "Zeus",
-    "number": "34464365634"
+    "number": "34464365637"
 }
