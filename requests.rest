@@ -4,10 +4,10 @@ DELETE https://murmuring-anchorage-64603.herokuapp.com/api/persons/52899
 GET https://murmuring-anchorage-64603.herokuapp.com/api/persons
 
 ###
-POST https://murmuring-anchorage-64603.herokuapp.com/api/persons
+POST http://localhost:3001/api/persons
 content-type: application/json
 
 {
-    "name": "Zeus",
-    "number": "34464365637"
+    "name": "Coco",
+    "number": "443663447"
 }
