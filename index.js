@@ -5,32 +5,32 @@ const app = express()
 const Person = require('./models/person')
 const cors = require('cors')
 const morgan = require('morgan')
-
-
-app.use(express.static('build'))
-app.use(cors())
-app.use(express.json())
-
 // Logs content of request
 morgan.token('content', (req, res) => {
     return JSON.stringify(req.body)
 })
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+
+app.use(cors())
+app.use(express.static('build'))
+app.use(express.json())
+
+
+
 
 const errHandler = (err, request, response, next) => {
-    console.log(errmessage)
-
+   
     if(err.name === 'CastError') {
         return response.status(400).send({error: 'malformatted id'})
     }
-    if(err.name === 'ValidatorError') {
+    if(err.name === 'ValidationError') {  
         return response.status(400).json({error: err.message})
     }
     next(err)
 }
-
-app.use(errHandler)
 
 
 // Displays all numbers from the people in the phonebook
@@ -93,7 +93,7 @@ app.post('/api/persons', (request, response, next) => {
         name: body.name,
         number: body.number
     }
-    
+
     const p = Person(person)
 
     p.save().then(savedPerson => {
@@ -102,6 +102,10 @@ app.post('/api/persons', (request, response, next) => {
     .catch(err => next(err))
     
 })
+
+
+app.use(unknownEndpoint)
+app.use(errHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {

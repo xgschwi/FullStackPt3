@@ -6,7 +6,7 @@ const url = process.env.MONGODB_URL
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true})
 
 const personSchema = new mongoose.Schema({
-    name: {type: String, minLength: 5, required: true, unique: true},
+    name: {type: String, minLength: 3, required: true, unique: true},
     number: {type: String, minLength: 8, required: true}
 })
 
